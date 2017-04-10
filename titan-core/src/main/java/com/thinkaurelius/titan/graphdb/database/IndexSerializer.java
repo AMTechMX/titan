@@ -639,8 +639,17 @@ public class IndexSerializer {
                 PropertyKey key = transaction.getPropertyKey(keyname);
                 Preconditions.checkNotNull(key);
                 Preconditions.checkArgument(index.indexesKey(key),
-                        "The used key [%s] is not indexed in the targeted index [%s]",key.name(),query.getIndex());
-                replacement = key2Field(index,key);
+                        "The used key [%s] is not indexed in the targeted index [%s]",
+                        key.name(), query.getIndex());
+                replacement = key2Field(index, key);
+            } else if (keyname.endsWith("__STRING") &&
+                    transaction.containsRelationType(keyname.substring(0, keyname.length() - "__STRING".length()))) {
+                PropertyKey key = transaction.getPropertyKey(keyname.substring(0, keyname.length() - "__STRING".length()));
+                Preconditions.checkNotNull(key);
+                Preconditions.checkArgument(index.indexesKey(key),
+                        "The used key [%s] is not indexed in the targeted index [%s]",
+                        key.name(), query.getIndex());
+                replacement = key2Field(index, key) + "__STRING";
             } else {
                 Preconditions.checkArgument(query.getUnknownKeyName()!=null,
                         "Found reference to non-existant property key in query at position [%s]: %s",startPos,keyname);
