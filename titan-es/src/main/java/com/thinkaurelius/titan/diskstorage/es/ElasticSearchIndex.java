@@ -9,6 +9,7 @@ import com.thinkaurelius.titan.core.Cardinality;
 import com.thinkaurelius.titan.core.TitanException;
 import com.thinkaurelius.titan.core.attribute.*;
 import com.thinkaurelius.titan.core.schema.Mapping;
+import com.thinkaurelius.titan.core.schema.Parameter;
 import com.thinkaurelius.titan.diskstorage.*;
 import com.thinkaurelius.titan.diskstorage.configuration.ConfigNamespace;
 import com.thinkaurelius.titan.diskstorage.configuration.ConfigOption;
@@ -945,6 +946,14 @@ public class ElasticSearchIndex implements IndexProvider {
         else srb.setSize(maxResultsSize);
         srb.setNoFields();
         //srb.setExplain(true);
+
+        for (Parameter param : query.getParameters()) {
+            if ("sorting".equals(param.key())) {
+                String val = param.value().toString();
+                String[] sorting = val.trim().split("\\s+");
+                srb.addSort(sorting[0], "desc".equalsIgnoreCase(sorting[1]) ? SortOrder.DESC : SortOrder.ASC);
+            }
+        }
 
         SearchResponse response = srb.execute().actionGet();
         log.debug("Executed query [{}] in {} ms", query.getQuery(), response.getTookInMillis());
