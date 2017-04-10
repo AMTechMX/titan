@@ -145,13 +145,17 @@ public class QueryProcessor<Q extends ElementQuery<R, B>, R extends TitanElement
         private final Iterator<R> iter;
 
         private PreSortingIterator(BackendQueryHolder<B> backendQueryHolder) {
+            long start = System.currentTimeMillis();
             List<R> all = Lists.newArrayList(executor.execute(query,
                     backendQueryHolder.getBackendQuery().updateLimit(MAX_SORT_ITERATION),
                     backendQueryHolder.getExecutionInfo(),backendQueryHolder.getProfiler()));
+            log.info("Time elapsed after retrieval of vertex from titan: {}", System.currentTimeMillis() - start);
             if (all.size() >= MAX_SORT_ITERATION)
                 throw new QueryException("Could not execute query since pre-sorting requires fetching more than " +
                         MAX_SORT_ITERATION + " elements. Consider rewriting the query to exploit sort orders");
+            start = System.currentTimeMillis();
             Collections.sort(all, query.getSortOrder());
+            log.info("Time elapsed in sorting results: {}", System.currentTimeMillis() - start);
             iter = all.iterator();
         }
 

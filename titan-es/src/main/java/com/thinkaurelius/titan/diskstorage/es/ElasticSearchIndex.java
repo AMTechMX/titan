@@ -860,6 +860,7 @@ public class ElasticSearchIndex implements IndexProvider {
 
     @Override
     public List<String> query(IndexQuery query, KeyInformation.IndexRetriever informations, BaseTransaction tx) throws BackendException {
+        long startMillis = System.currentTimeMillis();
         SearchRequestBuilder srb = client.prepareSearch(indexName);
         srb.setTypes(query.getStore());
         srb.setQuery(QueryBuilders.matchAllQuery());
@@ -885,15 +886,19 @@ public class ElasticSearchIndex implements IndexProvider {
         srb.setNoFields();
         //srb.setExplain(true);
 
+        log.info("Elasticsearch query {}", srb);
         SearchResponse response = srb.execute().actionGet();
-        log.debug("Executed query [{}] in {} ms", query.getCondition(), response.getTookInMillis());
+        log.info("Executed query [{}] in {} ms", query.getCondition(), response.getTookInMillis());
         SearchHits hits = response.getHits();
         if (!query.hasLimit() && hits.totalHits() >= maxResultsSize)
             log.warn("Query result set truncated to first [{}] elements for query: {}", maxResultsSize, query);
         List<String> result = new ArrayList<String>(hits.hits().length);
+        log.info("Size of elasticsearch response: {}", hits.hits().length);
         for (SearchHit hit : hits) {
             result.add(hit.id());
+            log.debug("Result: {}", hit.id());
         }
+        log.info("Total time consumed in elasticsearch query: {}", System.currentTimeMillis() - startMillis);
         return result;
     }
 
