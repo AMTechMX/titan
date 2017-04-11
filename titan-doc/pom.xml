@@ -1,15 +1,15 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>com.thinkaurelius.titan</groupId>
+        <groupId>solutions.amtech</groupId>
         <artifactId>titan</artifactId>
-        <version>1.0.0</version>
+        <version>1.0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <packaging>pom</packaging>
     <artifactId>titan-doc</artifactId>
     <name>Titan-Doc: AsciiDoc Manual for Titan</name>
-    <url>http://thinkaurelius.github.com/titan/</url>
+    <url>https://github.com/amtechmx/titan</url>
 
     <properties>
         <top.level.basedir>${project.basedir}/..</top.level.basedir>
@@ -318,25 +318,25 @@
 
             <build>
                 <plugins>
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>wagon-maven-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>deploy-docs-to-s3</id>
-                                <inherited>false</inherited>
-                                <phase>deploy</phase>
-                                <goals>
-                                    <goal>upload</goal>
-                                </goals>
-                                <configuration>
-                                    <fromDir>${htmlchunk.output.dir}</fromDir>
-                                    <serverId>aurelius.s3</serverId> <!-- your ~/.m2/settings.xml must match -->
-                                    <url>s3://s3.thinkaurelius.com/docs/titan/${project.version}</url>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
+                    <!--<plugin>-->
+                        <!--<groupId>org.codehaus.mojo</groupId>-->
+                        <!--<artifactId>wagon-maven-plugin</artifactId>-->
+                        <!--<executions>-->
+                            <!--<execution>-->
+                                <!--<id>deploy-docs-to-s3</id>-->
+                                <!--<inherited>false</inherited>-->
+                                <!--<phase>deploy</phase>-->
+                                <!--<goals>-->
+                                    <!--<goal>none</goal>-->
+                                <!--</goals>-->
+                                <!--<configuration>-->
+                                    <!--<fromDir>${htmlchunk.output.dir}</fromDir>-->
+                                    <!--<serverId>aurelius.s3</serverId> &lt;!&ndash; your ~/.m2/settings.xml must match &ndash;&gt;-->
+                                    <!--<url>s3://s3.thinkaurelius.com/docs/titan/${project.version}</url>-->
+                                <!--</configuration>-->
+                            <!--</execution>-->
+                        <!--</executions>-->
+                    <!--</plugin>-->
                 </plugins>
             </build>
         </profile>

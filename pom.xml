@@ -1,24 +1,28 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.sonatype.oss</groupId>
         <artifactId>oss-parent</artifactId>
         <version>7</version>
     </parent>
-    <groupId>com.thinkaurelius.titan</groupId>
+    <groupId>solutions.amtech</groupId>
     <artifactId>titan</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
     <prerequisites>
         <maven>2.2.1</maven>
     </prerequisites>
     <name>Titan: Distributed Graph Database</name>
-    <url>http://thinkaurelius.github.com/titan/</url>
+    <url>https://github.com/amtechmx/titan</url>
 
     <description>
-        Titan is a distributed graph database optimized for processing massive-scale graphs represented over a machine
+        Titan is a distributed graph database optimized for processing
+        massive-scale graphs represented over a machine
         cluster.
-        Titan separates the concerns of graph processing and manipulation from storing the graph on disk,
+        Titan separates the concerns of graph processing and manipulation from
+        storing the graph on disk,
         delegating that concern to an extensible set of persistence solutions.
     </description>
     <developers>
@@ -52,13 +56,13 @@
         </license>
     </licenses>
     <scm>
-        <connection>scm:git:git@github.com:thinkaurelius/titan.git</connection>
-        <developerConnection>scm:git:git@github.com:thinkaurelius/titan.git</developerConnection>
-        <url>git@github.com:thinkaurelius/titan.git</url>
-        <tag>1.0.0</tag>
+        <connection>scm:git:git@github.com:amtechmx/titan.git</connection>
+        <developerConnection>scm:git:git@github.com:amtechmx/titan.git
+        </developerConnection>
+        <url>git@github.com:amtechmx/titan.git</url>
     </scm>
     <properties>
-        <titan.compatible.versions />
+        <titan.compatible.versions/>
         <tinkerpop.version>3.0.1-incubating</tinkerpop.version>
         <junit.version>4.12</junit.version>
         <mrunit.version>1.1.0</mrunit.version>
@@ -99,20 +103,27 @@
         <kuali.s3.wagon.version>1.1.20</kuali.s3.wagon.version>
         <jasper.version>5.5.23</jasper.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <project.reporting.outputEncoding>UTF-8
+        </project.reporting.outputEncoding>
         <titan.testdir>${project.build.directory}/titan-test</titan.testdir>
         <gpg.skip>false</gpg.skip>
-        <perf.jvm.opts />
-        <default.test.jvm.opts>-Xms256m -Xmx768m -XX:+HeapDumpOnOutOfMemoryError -ea ${test.extra.jvm.opts}</default.test.jvm.opts>
-        <mem.jvm.opts>-Xms256m -Xmx256m -ea -XX:+HeapDumpOnOutOfMemoryError ${test.extra.jvm.opts}</mem.jvm.opts>
-        <test.extra.jvm.opts />
+        <perf.jvm.opts/>
+        <default.test.jvm.opts>-Xms256m -Xmx768m -XX:+HeapDumpOnOutOfMemoryError
+            -ea ${test.extra.jvm.opts}
+        </default.test.jvm.opts>
+        <mem.jvm.opts>-Xms256m -Xmx256m -ea -XX:+HeapDumpOnOutOfMemoryError
+            ${test.extra.jvm.opts}
+        </mem.jvm.opts>
+        <test.extra.jvm.opts/>
         <test.skip.default>false</test.skip.default>
         <test.skip.tp>true</test.skip.tp>
         <top.level.basedir>${basedir}</top.level.basedir>
         <compiler.source>1.8</compiler.source>
         <compiler.target>1.8</compiler.target>
-        <compiler.args />
-        <test.excluded.groups>com.thinkaurelius.titan.testcategory.MemoryTests,com.thinkaurelius.titan.testcategory.PerformanceTests,com.thinkaurelius.titan.testcategory.BrittleTests</test.excluded.groups>
+        <compiler.args/>
+        <test.excluded.groups>
+            com.thinkaurelius.titan.testcategory.MemoryTests,com.thinkaurelius.titan.testcategory.PerformanceTests,com.thinkaurelius.titan.testcategory.BrittleTests
+        </test.excluded.groups>
     </properties>
     <modules>
         <module>titan-core</module>
@@ -134,7 +145,8 @@
         <repository>
             <id>apache-snapshots</id>
             <name>repository.apache.org snapshots</name>
-            <url>https://repository.apache.org/content/repositories/snapshots</url>
+            <url>https://repository.apache.org/content/repositories/snapshots
+            </url>
             <releases>
                 <enabled>false</enabled>
             </releases>
@@ -157,7 +169,7 @@
                         </goals>
                         <configuration>
                             <rules>
-                                <DependencyConvergence />
+                                <DependencyConvergence/>
                             </rules>
                         </configuration>
                     </execution>
@@ -233,7 +245,8 @@
                         <runOrder>alphabetical</runOrder>
                         <failIfNoTests>false</failIfNoTests>
                         <!-- six hours -->
-                        <forkedProcessTimeoutInSeconds>21600</forkedProcessTimeoutInSeconds>
+                        <forkedProcessTimeoutInSeconds>21600
+                        </forkedProcessTimeoutInSeconds>
                         <reuseForks>false</reuseForks>
                         <excludes>
                             <exclude>**/*PerformanceTest.java</exclude>
@@ -264,7 +277,8 @@
                                     <include>**/*Groovy*Test.java</include>
                                     <include>**/*ComputerTest.java</include>
                                     <include>**/*ProcessTest.java</include>
-                                    <include>**/*ProcessPerformanceTest.java</include>
+                                    <include>**/*ProcessPerformanceTest.java
+                                    </include>
                                     <include>**/*StructureTest.java</include>
                                 </includes>
                                 <runOrder>alphabetical</runOrder>
@@ -273,7 +287,7 @@
                                 </excludes> -->
                                 <skipTests>${test.skip.tp}</skipTests>
                             </configuration>
-                       </execution>
+                        </execution>
                     </executions>
                 </plugin>
                 <plugin>
@@ -1015,32 +1029,40 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-source-plugin</artifactId>
-                        <version>2.1.2</version>
+                        <version>2.2.1</version>
                         <executions>
                             <execution>
                                 <id>attach-sources</id>
-                                <phase>none</phase>
+                                <goals>
+                                    <goal>jar-no-fork</goal>
+                                </goals>
                             </execution>
                         </executions>
                     </plugin>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>2.7</version>
+                        <version>2.9.1</version>
                         <executions>
                             <execution>
                                 <id>attach-javadocs</id>
-                                <phase>none</phase>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
                             </execution>
                         </executions>
                     </plugin>
                     <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
-                        <version>1.1</version>
+                        <version>1.5</version>
                         <executions>
                             <execution>
                                 <id>sign-artifacts</id>
-                                <phase>none</phase>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
                             </execution>
                         </executions>
                     </plugin>
@@ -1114,7 +1136,8 @@
         <profile>
             <id>sonar-upload</id>
             <properties>
-                <sonar.jacoco.reportPath>../target/jacoco-combined.exec</sonar.jacoco.reportPath>
+                <sonar.jacoco.reportPath>../target/jacoco-combined.exec
+                </sonar.jacoco.reportPath>
                 <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
             </properties>
         </profile>
@@ -1211,12 +1234,14 @@
                     </dependency>
                     <dependency>
                         <groupId>org.apache.hadoop</groupId>
-                        <artifactId>hadoop-mapreduce-client-jobclient</artifactId>
+                        <artifactId>hadoop-mapreduce-client-jobclient
+                        </artifactId>
                         <version>${hadoop2.version}</version>
                     </dependency>
                     <dependency>
                         <groupId>org.apache.hadoop</groupId>
-                        <artifactId>hadoop-mapreduce-client-jobclient</artifactId>
+                        <artifactId>hadoop-mapreduce-client-jobclient
+                        </artifactId>
                         <version>${hadoop2.version}</version>
                         <classifier>tests</classifier>
                         <type>test-jar</type>
@@ -1244,7 +1269,7 @@
                 </dependencies>
             </dependencyManagement>
         </profile>
-	
+
         <profile>
             <id>coverage</id>
             <build>
@@ -1255,7 +1280,9 @@
                             <execution>
                                 <id>default-test</id>
                                 <configuration>
-                                    <argLine>${default.test.jvm.opts} ${jacoco.opts}</argLine>
+                                    <argLine>${default.test.jvm.opts}
+                                        ${jacoco.opts}
+                                    </argLine>
                                 </configuration>
                             </execution>
                         </executions>
@@ -1270,10 +1297,14 @@
                                     <goal>copy-resources</goal>
                                 </goals>
                                 <configuration>
-                                    <outputDirectory>${project.build.directory}/jacoco-sources</outputDirectory>
+                                    <outputDirectory>
+                                        ${project.build.directory}/jacoco-sources
+                                    </outputDirectory>
                                     <resources>
                                         <resource>
-                                            <directory>${project.basedir}/src/main/java/</directory>
+                                            <directory>
+                                                ${project.basedir}/src/main/java/
+                                            </directory>
                                             <filtering>false</filtering>
                                         </resource>
                                     </resources>
@@ -1286,10 +1317,14 @@
                                     <goal>copy-resources</goal>
                                 </goals>
                                 <configuration>
-                                    <outputDirectory>${project.build.directory}/jacoco-classes</outputDirectory>
+                                    <outputDirectory>
+                                        ${project.build.directory}/jacoco-classes
+                                    </outputDirectory>
                                     <resources>
                                         <resource>
-                                            <directory>${project.build.directory}/classes/</directory>
+                                            <directory>
+                                                ${project.build.directory}/classes/
+                                            </directory>
                                             <filtering>false</filtering>
                                         </resource>
                                     </resources>
@@ -1309,9 +1344,13 @@
                                 </goals>
                                 <configuration>
                                     <classifier>sources</classifier>
-                                    <outputDirectory>${project.build.directory}/jacoco-sources</outputDirectory>
-                                    <includeGroupIds>${project.groupId}</includeGroupIds>
-                                    <excludeArtifactIds>titan-test</excludeArtifactIds>
+                                    <outputDirectory>
+                                        ${project.build.directory}/jacoco-sources
+                                    </outputDirectory>
+                                    <includeGroupIds>${project.groupId}
+                                    </includeGroupIds>
+                                    <excludeArtifactIds>titan-test
+                                    </excludeArtifactIds>
                                 </configuration>
                             </execution>
                             <execution>
@@ -1321,11 +1360,15 @@
                                     <goal>unpack-dependencies</goal>
                                 </goals>
                                 <configuration>
-                                    <classifier />
+                                    <classifier/>
                                     <!-- empty classifier requests the artifact containing classes -->
-                                    <outputDirectory>${project.build.directory}/jacoco-classes</outputDirectory>
-                                    <includeGroupIds>${project.groupId}</includeGroupIds>
-                                    <excludeArtifactIds>titan-test</excludeArtifactIds>
+                                    <outputDirectory>
+                                        ${project.build.directory}/jacoco-classes
+                                    </outputDirectory>
+                                    <includeGroupIds>${project.groupId}
+                                    </includeGroupIds>
+                                    <excludeArtifactIds>titan-test
+                                    </excludeArtifactIds>
                                 </configuration>
                             </execution>
                         </executions>
@@ -1341,7 +1384,8 @@
                                     <goal>prepare-agent</goal>
                                 </goals>
                                 <configuration>
-                                    <destFile>../target/jacoco-combined.exec</destFile>
+                                    <destFile>../target/jacoco-combined.exec
+                                    </destFile>
                                     <append>true</append>
                                     <propertyName>jacoco.opts</propertyName>
                                 </configuration>
@@ -1364,21 +1408,26 @@
                                 </goals>
                                 <configuration>
                                     <target>
-                                        <taskdef name="report" classname="org.jacoco.ant.ReportTask" classpathref="maven.plugin.classpath" />
+                                        <taskdef name="report"
+                                                 classname="org.jacoco.ant.ReportTask"
+                                                 classpathref="maven.plugin.classpath"/>
                                         <report>
                                             <executiondata>
-                                                <file file="../target/jacoco-combined.exec" />
+                                                <file file="../target/jacoco-combined.exec"/>
                                             </executiondata>
-                                            <structure name="Integration test coverage">
+                                            <structure
+                                                    name="Integration test coverage">
                                                 <classfiles>
-                                                    <fileset dir="${project.build.directory}/jacoco-classes" />
+                                                    <fileset
+                                                            dir="${project.build.directory}/jacoco-classes"/>
                                                     u
                                                 </classfiles>
                                                 <sourcefiles encoding="UTF-8">
-                                                    <fileset dir="${project.build.directory}/jacoco-sources" />
+                                                    <fileset
+                                                            dir="${project.build.directory}/jacoco-sources"/>
                                                 </sourcefiles>
                                             </structure>
-                                            <html destdir="${project.build.directory}/jacoco-report" />
+                                            <html destdir="${project.build.directory}/jacoco-report"/>
                                         </report>
                                     </target>
                                 </configuration>
@@ -1421,10 +1470,13 @@
                                     <forkCount>1</forkCount>
                                     <parallel>none</parallel>
                                     <threadCount>1</threadCount>
-                                    <perCoreThreadCount>false</perCoreThreadCount>
+                                    <perCoreThreadCount>false
+                                    </perCoreThreadCount>
                                     <runOrder>alphabetical</runOrder>
-                                    <groups>com.thinkaurelius.titan.testcategory.MemoryTests</groups>
-                                    <excludedGroups />
+                                    <groups>
+                                        com.thinkaurelius.titan.testcategory.MemoryTests
+                                    </groups>
+                                    <excludedGroups/>
                                 </configuration>
                             </execution>
                         </executions>
@@ -1453,15 +1505,20 @@
                                 </goals>
                                 <phase>test</phase>
                                 <configuration combine.self="override">
-                                    <argLine>${default.test.jvm.opts} ${perf.jvm.opts}</argLine>
+                                    <argLine>${default.test.jvm.opts}
+                                        ${perf.jvm.opts}
+                                    </argLine>
                                     <reuseForks>false</reuseForks>
                                     <forkCount>1</forkCount>
                                     <parallel>none</parallel>
                                     <threadCount>1</threadCount>
-                                    <perCoreThreadCount>false</perCoreThreadCount>
+                                    <perCoreThreadCount>false
+                                    </perCoreThreadCount>
                                     <runOrder>alphabetical</runOrder>
-                                    <groups>com.thinkaurelius.titan.testcategory.PerformanceTests</groups>
-                                    <excludedGroups />
+                                    <groups>
+                                        com.thinkaurelius.titan.testcategory.PerformanceTests
+                                    </groups>
+                                    <excludedGroups/>
                                 </configuration>
                             </execution>
                         </executions>
@@ -1488,7 +1545,8 @@
                                     <includes>
                                         <include>pom.xml</include>
                                     </includes>
-                                    <stylesheet>${top.level.basedir}/jre6.xslt</stylesheet>
+                                    <stylesheet>${top.level.basedir}/jre6.xslt
+                                    </stylesheet>
                                 </transformationSet>
                             </transformationSets>
                         </configuration>
@@ -1506,7 +1564,9 @@
                             <outputDirectory>${basedir}</outputDirectory>
                             <resources>
                                 <resource>
-                                    <directory>${basedir}/target/generated-resources/xml/xslt/</directory>
+                                    <directory>
+                                        ${basedir}/target/generated-resources/xml/xslt/
+                                    </directory>
                                     <includes>
                                         <include>pom.xml</include>
                                     </includes>
@@ -1530,10 +1590,15 @@
             <properties>
                 <asciidoc.input.dir>${project.basedir}/docs</asciidoc.input.dir>
                 <xsl.input.dir>${asciidoc.input.dir}/xsl</xsl.input.dir>
-                <xsl.output.dir>${project.basedir}/target/docs/xsl</xsl.output.dir>
-                <docbook.output.dir>${project.basedir}/target/docs/docbook</docbook.output.dir>
-                <htmlsingle.output.dir>${project.basedir}/target/docs/htmlsingle</htmlsingle.output.dir>
-                <htmlchunk.output.dir>${project.basedir}/target/docs/htmlchunk</htmlchunk.output.dir>
+                <xsl.output.dir>${project.basedir}/target/docs/xsl
+                </xsl.output.dir>
+                <docbook.output.dir>${project.basedir}/target/docs/docbook
+                </docbook.output.dir>
+                <htmlsingle.output.dir>
+                    ${project.basedir}/target/docs/htmlsingle
+                </htmlsingle.output.dir>
+                <htmlchunk.output.dir>${project.basedir}/target/docs/htmlchunk
+                </htmlchunk.output.dir>
             </properties>
 
             <build>
@@ -1550,9 +1615,12 @@
                                 </goals>
                                 <inherited>false</inherited>
                                 <configuration>
-                                    <sourceDirectory>${asciidoc.input.dir}</sourceDirectory>
-                                    <sourceDocumentName>index.txt</sourceDocumentName>
-                                    <outputDirectory>${docbook.output.dir}</outputDirectory>
+                                    <sourceDirectory>${asciidoc.input.dir}
+                                    </sourceDirectory>
+                                    <sourceDocumentName>index.txt
+                                    </sourceDocumentName>
+                                    <outputDirectory>${docbook.output.dir}
+                                    </outputDirectory>
                                     <backend>docbook5</backend>
                                     <doctype>book</doctype>
                                     <attributes>
@@ -1580,14 +1648,20 @@
                                     <transformationSets>
                                         <transformationSet>
                                             <dir>${docbook.output.dir}</dir>
-                                            <outputDir>${htmlsingle.output.dir}</outputDir>
+                                            <outputDir>
+                                                ${htmlsingle.output.dir}
+                                            </outputDir>
                                             <includes>
                                                 <include>index.xml</include>
                                             </includes>
-                                            <stylesheet>${xsl.output.dir}/titansingle.xsl</stylesheet>
+                                            <stylesheet>
+                                                ${xsl.output.dir}/titansingle.xsl
+                                            </stylesheet>
                                             <fileMappers>
-                                                <fileMapper implementation="org.codehaus.plexus.components.io.filemappers.FileExtensionMapper">
-                                                    <targetExtension>.html</targetExtension>
+                                                <fileMapper
+                                                        implementation="org.codehaus.plexus.components.io.filemappers.FileExtensionMapper">
+                                                    <targetExtension>.html
+                                                    </targetExtension>
                                                 </fileMapper>
                                             </fileMappers>
                                         </transformationSet>
@@ -1609,10 +1683,14 @@
                                             <includes>
                                                 <include>index.xml</include>
                                             </includes>
-                                            <stylesheet>${xsl.output.dir}/titanchunk.xsl</stylesheet>
+                                            <stylesheet>
+                                                ${xsl.output.dir}/titanchunk.xsl
+                                            </stylesheet>
                                             <fileMappers>
-                                                <fileMapper implementation="org.codehaus.plexus.components.io.filemappers.FileExtensionMapper">
-                                                    <targetExtension>.html</targetExtension>
+                                                <fileMapper
+                                                        implementation="org.codehaus.plexus.components.io.filemappers.FileExtensionMapper">
+                                                    <targetExtension>.html
+                                                    </targetExtension>
                                                 </fileMapper>
                                             </fileMappers>
                                         </transformationSet>
@@ -1644,13 +1722,15 @@
                                 </goals>
                                 <inherited>false</inherited>
                                 <configuration>
-                                    <outputDirectory>${xsl.output.dir}</outputDirectory>
+                                    <outputDirectory>${xsl.output.dir}
+                                    </outputDirectory>
                                     <delimiters>
                                         <delimiter>$MAVEN{*}</delimiter>
                                     </delimiters>
                                     <resources>
                                         <resource>
-                                            <directory>${xsl.input.dir}</directory>
+                                            <directory>${xsl.input.dir}
+                                            </directory>
                                             <filtering>true</filtering>
                                         </resource>
                                     </resources>
@@ -1664,10 +1744,13 @@
                                 </goals>
                                 <inherited>false</inherited>
                                 <configuration>
-                                    <outputDirectory>${htmlsingle.output.dir}</outputDirectory>
+                                    <outputDirectory>${htmlsingle.output.dir}
+                                    </outputDirectory>
                                     <resources>
                                         <resource>
-                                            <directory>${asciidoc.input.dir}/static</directory>
+                                            <directory>
+                                                ${asciidoc.input.dir}/static
+                                            </directory>
                                             <filtering>false</filtering>
                                         </resource>
                                     </resources>
@@ -1681,10 +1764,13 @@
                                 </goals>
                                 <inherited>false</inherited>
                                 <configuration>
-                                    <outputDirectory>${htmlchunk.output.dir}</outputDirectory>
+                                    <outputDirectory>${htmlchunk.output.dir}
+                                    </outputDirectory>
                                     <resources>
                                         <resource>
-                                            <directory>${asciidoc.input.dir}/static</directory>
+                                            <directory>
+                                                ${asciidoc.input.dir}/static
+                                            </directory>
                                             <filtering>false</filtering>
                                         </resource>
                                     </resources>
@@ -1709,7 +1795,8 @@
                         <plugin>
                             <artifactId>maven-javadoc-plugin</artifactId>
                             <configuration>
-                                <additionalparam>-Xdoclint:none</additionalparam>
+                                <additionalparam>-Xdoclint:none
+                                </additionalparam>
                             </configuration>
                         </plugin>
                     </plugins>
@@ -1758,4 +1845,16 @@
         </profile>
         -->
     </profiles>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/
+            </url>
+        </repository>
+    </distributionManagement>
 </project>
