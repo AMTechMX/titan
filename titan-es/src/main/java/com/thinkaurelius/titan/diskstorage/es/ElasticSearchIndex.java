@@ -639,7 +639,7 @@ public class ElasticSearchIndex implements IndexProvider {
                     String jsValue = convertToJsType(deletion.value);
                     script.append("def index = ctx._source[\"" + deletion.field + "\"].indexOf(" + jsValue + "); ctx._source[\"" + deletion.field + "\"].remove(index);");
                     if (hasDualStringMapping(informations.get(storename, deletion.field))) {
-                        script.append("def index = ctx._source[\"" + getDualMappingName(deletion.field) + "\"].indexOf(" + jsValue + "); ctx._source[\"" + getDualMappingName(deletion.field) + "\"].remove(index);");
+                        script.append("index = ctx._source[\"" + getDualMappingName(deletion.field) + "\"].indexOf(" + jsValue + "); ctx._source[\"" + getDualMappingName(deletion.field) + "\"].remove(index);");
                     }
                     break;
 
