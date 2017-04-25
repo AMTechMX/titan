@@ -606,10 +606,11 @@ public class StandardTitanGraph extends TitanBlueprintsGraph {
                 has2iMods = true;
                 IndexTransaction itx = mutator.getIndexTransaction(update.getIndex().getBackingIndexName());
                 String indexStore = ((MixedIndexType)update.getIndex()).getStoreName();
+
                 if (update.isAddition())
                     itx.add(indexStore, update.getKey(), update.getEntry(), update.getElement().isNew());
                 else
-                    itx.delete(indexStore,update.getKey(),update.getEntry().field,update.getEntry().value,update.getElement().isRemoved());
+                    itx.delete(indexStore, update.getKey(), update.getEntry(), update.getElement().isRemoved());
             }
         }
         return new ModificationSummary(!mutations.isEmpty(),has2iMods);

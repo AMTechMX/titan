@@ -18,18 +18,22 @@ public class IndexEntry implements MetaAnnotated, MetaAnnotatable {
 
     public final String field;
     public final Object value;
+    public final boolean isCollection;
 
-    public IndexEntry(final String field, final Object value) {
-        this(field, value, null);
+    public IndexEntry(final String field, final Object value,
+            final boolean isCollection) {
+        this(field, value, isCollection, null);
     }
 
-    public IndexEntry(final String field, final Object value, Map<EntryMetaData, Object> metadata) {
+    public IndexEntry(final String field, final Object value,
+            final boolean isCollection, Map<EntryMetaData, Object> metadata) {
         Preconditions.checkNotNull(field);
         Preconditions.checkNotNull(value);
         Preconditions.checkArgument(StringUtils.isNotBlank(field));
 
         this.field = field;
         this.value = value;
+        this.isCollection = isCollection;
 
         if (metadata == null || metadata == EntryMetaData.EMPTY_METADATA)
             return;
@@ -38,17 +42,17 @@ public class IndexEntry implements MetaAnnotated, MetaAnnotatable {
             setMetaData(e.getKey(), e.getValue());
     }
 
-    //########## META DATA ############
-    //copied from StaticArrayEntry
+    // ########## META DATA ############
+    // copied from StaticArrayEntry
 
-    private Map<EntryMetaData,Object> metadata = EntryMetaData.EMPTY_METADATA;
+    private Map<EntryMetaData, Object> metadata = EntryMetaData.EMPTY_METADATA;
 
     @Override
     public synchronized Object setMetaData(EntryMetaData key, Object value) {
         if (metadata == EntryMetaData.EMPTY_METADATA)
             metadata = new EntryMetaData.Map();
 
-        return metadata.put(key,value);
+        return metadata.put(key, value);
     }
 
     @Override
@@ -57,7 +61,7 @@ public class IndexEntry implements MetaAnnotated, MetaAnnotatable {
     }
 
     @Override
-    public Map<EntryMetaData,Object> getMetaData() {
+    public Map<EntryMetaData, Object> getMetaData() {
         return metadata;
     }
 

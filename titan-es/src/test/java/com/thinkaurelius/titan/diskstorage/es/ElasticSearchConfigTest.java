@@ -284,7 +284,7 @@ public class ElasticSearchConfigTest {
         BaseTransactionConfig txConfig = StandardBaseTransactionConfig.of(TimestampProviders.MILLI);
         IndexTransaction itx = new IndexTransaction(idx, indexRetriever, txConfig, maxWrite);
         assertEquals(0, itx.query(new IndexQuery(storeName, PredicateCondition.of(IndexProviderTest.NAME, Text.PREFIX, "ali"))).size());
-        itx.add(storeName, "doc", IndexProviderTest.NAME, "alice", false);
+        itx.add(storeName, "doc", IndexProviderTest.NAME, "alice", false, false);
         itx.commit();
         Thread.sleep(1500L); // Slightly longer than default 1s index.refresh_interval
         itx = new IndexTransaction(idx, indexRetriever, txConfig, maxWrite);

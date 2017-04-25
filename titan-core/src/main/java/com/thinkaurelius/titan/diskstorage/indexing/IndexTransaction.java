@@ -47,15 +47,19 @@ public class IndexTransaction implements BaseTransaction, LoggableTransaction {
     }
 
     public void add(String store, String docid, IndexEntry entry, boolean isNew) {
-        getIndexMutation(store,docid, isNew, false).addition(new IndexEntry(entry.field, entry.value, entry.getMetaData()));
+        getIndexMutation(store, docid, isNew, false).addition(new IndexEntry(entry.field, entry.value, entry.isCollection, entry.getMetaData()));
     }
 
-    public void add(String store, String docid, String key, Object value, boolean isNew) {
-        getIndexMutation(store,docid,isNew,false).addition(new IndexEntry(key,value));
+    public void add(String store, String docid, String key, Object value, boolean isCollection, boolean isNew) {
+        getIndexMutation(store, docid, isNew, false).addition(new IndexEntry(key, value, isCollection));
     }
 
-    public void delete(String store, String docid, String key, Object value, boolean deleteAll) {
-        getIndexMutation(store,docid,false,deleteAll).deletion(new IndexEntry(key,value));
+    public void delete(String store, String docid, IndexEntry entry, boolean deleteAll) {
+        getIndexMutation(store, docid, false, deleteAll).deletion(new IndexEntry(entry.field, entry.value, entry.isCollection, entry.getMetaData()));
+    }
+
+    public void delete(String store, String docid, String key, Object value, boolean isCollection, boolean deleteAll) {
+        getIndexMutation(store, docid, false, deleteAll).deletion(new IndexEntry(key, value, isCollection));
     }
 
     private IndexMutation getIndexMutation(String store, String docid, boolean isNew, boolean isDeleted) {

@@ -489,14 +489,14 @@ public abstract class IndexProviderTest {
             put(store1, new HashMap<String, List<IndexEntry>>() {{
                 put("restore-doc1", Collections.<IndexEntry>emptyList());
                 put("restore-doc2", new ArrayList<IndexEntry>() {{
-                    add(new IndexEntry(NAME, "not-second"));
-                    add(new IndexEntry(WEIGHT, 2.1d));
-                    add(new IndexEntry(TIME, 0L));
+                    add(new IndexEntry(NAME, "not-second", false));
+                    add(new IndexEntry(WEIGHT, 2.1d, false));
+                    add(new IndexEntry(TIME, 0L, false));
                 }});
                 put("restore-doc3", new ArrayList<IndexEntry>() {{
-                    add(new IndexEntry(NAME, "third"));
-                    add(new IndexEntry(WEIGHT, 11.5d));
-                    add(new IndexEntry(TIME, 3L));
+                    add(new IndexEntry(NAME, "third", false));
+                    add(new IndexEntry(WEIGHT, 11.5d, false));
+                    add(new IndexEntry(TIME, 3L, false));
                 }});
             }});
         }}, indexRetriever, tx);
@@ -522,16 +522,16 @@ public abstract class IndexProviderTest {
         index.restore(new HashMap<String, Map<String, List<IndexEntry>>>() {{
             put(store1, new HashMap<String, List<IndexEntry>>() {{
                 put("restore-doc1", new ArrayList<IndexEntry>() {{
-                    add(new IndexEntry(NAME, "first-restored"));
-                    add(new IndexEntry(WEIGHT, 7.0d));
-                    add(new IndexEntry(TIME, 4L));
+                    add(new IndexEntry(NAME, "first-restored", false));
+                    add(new IndexEntry(WEIGHT, 7.0d, false));
+                    add(new IndexEntry(TIME, 4L, false));
                 }});
             }});
             put(store2, new HashMap<String, List<IndexEntry>>() {{
                 put("restore-doc1", new ArrayList<IndexEntry>() {{
-                    add(new IndexEntry(NAME, "first-in-second-store"));
-                    add(new IndexEntry(WEIGHT, 4.0d));
-                    add(new IndexEntry(TIME, 5L));
+                    add(new IndexEntry(NAME, "first-in-second-store", false));
+                    add(new IndexEntry(WEIGHT, 4.0d, false));
+                    add(new IndexEntry(TIME, 5L, false));
                 }});
             }});
         }}, indexRetriever, tx);
@@ -642,12 +642,12 @@ public abstract class IndexProviderTest {
         runConflictingTx(new TxJob() {
             @Override
             public void run(IndexTransaction tx) {
-                tx.delete(defStore, defDoc, TEXT, ImmutableMap.of(), true);
+                tx.delete(defStore, defDoc, TEXT, ImmutableMap.of(), false, true);
             }
         }, new TxJob() {
              @Override
              public void run(IndexTransaction tx) {
-                 tx.delete(defStore, defDoc, TEXT, defTextValue, false);
+                 tx.delete(defStore, defDoc, TEXT, defTextValue, false, false);
              }
          });
 
@@ -660,12 +660,12 @@ public abstract class IndexProviderTest {
         runConflictingTx(new TxJob() {
             @Override
             public void run(IndexTransaction tx) {
-                tx.delete(defStore, defDoc, TEXT, ImmutableMap.of(), true);
+                tx.delete(defStore, defDoc, TEXT, ImmutableMap.of(), false, true);
             }
         }, new TxJob() {
             @Override
             public void run(IndexTransaction tx) {
-                tx.add(defStore, defDoc, TEXT, "the slow brown fox jumps over the lazy dog", false);
+                tx.add(defStore, defDoc, TEXT, "the slow brown fox jumps over the lazy dog", false, false);
             }
         });
 
@@ -680,12 +680,12 @@ public abstract class IndexProviderTest {
         runConflictingTx(new TxJob() {
                              @Override
                              public void run(IndexTransaction tx) {
-                                 tx.delete(defStore, defDoc, TEXT, ImmutableMap.of(), true);
+                                 tx.delete(defStore, defDoc, TEXT, ImmutableMap.of(), false, true);
                              }
                          }, new TxJob() {
                              @Override
                              public void run(IndexTransaction tx) {
-                                 tx.add(defStore, defDoc, NAME, nameValue, false);
+                                 tx.add(defStore, defDoc, NAME, nameValue, false, false);
                              }
                          });
 
@@ -702,12 +702,12 @@ public abstract class IndexProviderTest {
         runConflictingTx(new TxJob() {
             @Override
             public void run(IndexTransaction tx) {
-                tx.add(defStore, defDoc, NAME, nameValue, false);
+                tx.add(defStore, defDoc, NAME, nameValue, false, false);
             }
         }, new TxJob() {
             @Override
             public void run(IndexTransaction tx) {
-                tx.delete(defStore, defDoc, TEXT, ImmutableMap.of(), true);
+                tx.delete(defStore, defDoc, TEXT, ImmutableMap.of(), false, true);
             }
         });
 
@@ -744,14 +744,14 @@ public abstract class IndexProviderTest {
         runConflictingTx(new TxJob() {
                              @Override
                              public void run(IndexTransaction tx) {
-                                 tx.delete(defStore, defDoc, TEXT, defTextValue, false);
-                                 tx.add(defStore, defDoc, TEXT, "sugar sugar", false);
+                                 tx.delete(defStore, defDoc, TEXT, defTextValue, false, false);
+                                 tx.add(defStore, defDoc, TEXT, "sugar sugar", false, false);
                              }
                          }, new TxJob() {
                              @Override
                              public void run(IndexTransaction tx) {
-                                 tx.delete(defStore, defDoc, TEXT, defTextValue, false);
-                                 tx.add(defStore, defDoc, TEXT, "honey honey", false);
+                                 tx.delete(defStore, defDoc, TEXT, defTextValue, false, false);
+                                 tx.add(defStore, defDoc, TEXT, "honey honey", false, false);
                              }
                          });
 
@@ -772,7 +772,7 @@ public abstract class IndexProviderTest {
         runConflictingTx(new TxJob() {
                              @Override
                              public void run(IndexTransaction tx) {
-                                 tx.add(defStore, defDoc, TEXT, revisedText, false);
+                                 tx.add(defStore, defDoc, TEXT, revisedText, false, false);
                              }
                          }, new TxJob() {
                              @Override
@@ -797,7 +797,7 @@ public abstract class IndexProviderTest {
         runConflictingTx(new TxJob() {
                              @Override
                              public void run(IndexTransaction tx) {
-                                 tx.delete(defStore, defDoc, TEXT, ImmutableMap.of(), false);
+                                 tx.delete(defStore, defDoc, TEXT, ImmutableMap.of(), false, false);
                              }
                          }, new TxJob() {
                              @Override
@@ -831,7 +831,7 @@ public abstract class IndexProviderTest {
             if (!index.supports(allKeys.get(kv.getKey())))
                 continue;
 
-            IndexEntry idx = new IndexEntry(kv.getKey(), kv.getValue());
+            IndexEntry idx = new IndexEntry(kv.getKey(), kv.getValue(), false);
             if (ttlInSeconds > 0)
                 idx.setMetaData(EntryMetaData.TTL, ttlInSeconds);
 
@@ -842,7 +842,7 @@ public abstract class IndexProviderTest {
     private void remove(String store, String docid, Multimap<String, Object> doc, boolean deleteAll) {
         for (Map.Entry<String, Object> kv : doc.entries()) {
             if (index.supports(allKeys.get(kv.getKey()))) {
-                tx.delete(store, docid, kv.getKey(), kv.getValue(), deleteAll);
+                tx.delete(store, docid, kv.getKey(), kv.getValue(), false, deleteAll);
             }
         }
     }

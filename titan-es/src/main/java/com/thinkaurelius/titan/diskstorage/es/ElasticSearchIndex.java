@@ -548,11 +548,13 @@ public class ElasticSearchIndex implements IndexProvider {
         BulkRequestBuilder brb = client.prepareBulk();
 
         int bulkrequests = 0;
+        log.trace("==== NEW MUTATION SET ====");
         try {
             for (Map.Entry<String, Map<String, IndexMutation>> stores : mutations.entrySet()) {
                 String storename = stores.getKey();
                 for (Map.Entry<String, IndexMutation> entry : stores.getValue().entrySet()) {
 
+                    log.trace("==== Starting a new mutation ====");
                     String docid = entry.getKey();
                     IndexMutation mutation = entry.getValue();
                     assert mutation.isConsolidated();
@@ -561,18 +563,23 @@ public class ElasticSearchIndex implements IndexProvider {
                     Preconditions.checkArgument(!mutation.isDeleted() || !mutation.hasAdditions());
                     //Deletions first
                     if (mutation.hasDeletions()) {
+                        log.trace("Mutation has deletions");
                         if (mutation.isDeleted()) {
                             log.trace("Deleting entire document {}", docid);
                             brb.add(new DeleteRequest(indexName, storename, docid));
                         } else {
+                            log.trace("Starting a deletion");
                             String script = getDeletionScript(informations, storename, mutation);
                             brb.add(client.prepareUpdate(indexName, storename, docid).setScript(script, ScriptService.ScriptType.INLINE));
-                            log.trace("Adding script {}", script);
+                            log.trace("Deletion script {}", script);
                         }
 
                         bulkrequests++;
+                    } else {
+                        log.trace("No deletions in mutation");
                     }
                     if (mutation.hasAdditions()) {
+                        log.trace("Mutation has additions");
                         int ttl = mutation.determineTTL();
 
                         if (mutation.isNew()) { //Index
@@ -581,6 +588,7 @@ public class ElasticSearchIndex implements IndexProvider {
                                     .source(getNewDocument(mutation.getAdditions(), informations.get(storename), ttl)));
 
                         } else {
+                            log.trace("Starting an addition");
                             Preconditions.checkArgument(ttl == 0, "Elasticsearch only supports TTL on new documents [%s]", docid);
 
                             boolean needUpsert = !mutation.hasDeletions();
@@ -596,6 +604,8 @@ public class ElasticSearchIndex implements IndexProvider {
                         }
 
                         bulkrequests++;
+                    } else {
+                        log.trace("No additions in mutation");
                     }
 
                 }
@@ -624,20 +634,34 @@ public class ElasticSearchIndex implements IndexProvider {
 
     private String getDeletionScript(KeyInformation.IndexRetriever informations, String storename, IndexMutation mutation) throws PermanentBackendException {
         StringBuilder script = new StringBuilder();
+        script.append("def index;");
         for (IndexEntry deletion : mutation.getDeletions()) {
             KeyInformation keyInformation = informations.get(storename).get(deletion.field);
 
+            String jsValue;
             switch (keyInformation.getCardinality()) {
                 case SINGLE:
+                    log.trace("Delete object['" + deletion.field + "'");
                     script.append("ctx._source.remove(\"" + deletion.field + "\");");
                     if (hasDualStringMapping(informations.get(storename, deletion.field))) {
                         script.append("ctx._source.remove(\"" + getDualMappingName(deletion.field) + "\");");
                     }
                     break;
                 case SET:
+                    jsValue = convertToJsType(deletion.value);
+                    log.trace("Delete from SET where object['" + deletion.field + "'] = " + jsValue);
+                    script.append(String.format("index = ctx._source[\"%s\"].indexOf(%s); while (index != -1) {ctx._source[\"%s\"].remove(index); index = ctx._source[\"%s\"].indexOf(%s) };",
+                            deletion.field, jsValue, deletion.field, deletion.field, jsValue));
+                    if (hasDualStringMapping(informations.get(storename, deletion.field))) {
+                        String fieldDualName = getDualMappingName(deletion.field);
+                        script.append(String.format("index = ctx._source[\"%s\"].indexOf(%s); while (index != -1) {ctx._source[\"%s\"].remove(index); index = ctx._source[\"%s\"].indexOf(%s) };",
+                                fieldDualName, jsValue, fieldDualName, fieldDualName, jsValue));
+                    }
+                    break;
                 case LIST:
-                    String jsValue = convertToJsType(deletion.value);
-                    script.append("def index = ctx._source[\"" + deletion.field + "\"].indexOf(" + jsValue + "); ctx._source[\"" + deletion.field + "\"].remove(index);");
+                    jsValue = convertToJsType(deletion.value);
+                    log.trace("Delete from LIST where object['" + deletion.field + "' = " + jsValue);
+                    script.append("index = ctx._source[\"" + deletion.field + "\"].indexOf(" + jsValue + "); ctx._source[\"" + deletion.field + "\"].remove(index);");
                     if (hasDualStringMapping(informations.get(storename, deletion.field))) {
                         script.append("index = ctx._source[\"" + getDualMappingName(deletion.field) + "\"].indexOf(" + jsValue + "); ctx._source[\"" + getDualMappingName(deletion.field) + "\"].remove(index);");
                     }
@@ -652,6 +676,7 @@ public class ElasticSearchIndex implements IndexProvider {
         StringBuilder script = new StringBuilder();
         for (IndexEntry e : mutation.getAdditions()) {
             KeyInformation keyInformation = informations.get(storename).get(e.field);
+            String jsValue;
             switch (keyInformation.getCardinality()) {
                 case SINGLE:
                     script.append("ctx._source[\"" + e.field + "\"] = " + convertToJsType(e.value) + ";");
@@ -660,6 +685,15 @@ public class ElasticSearchIndex implements IndexProvider {
                     }
                     break;
                 case SET:
+                    jsValue = convertToJsType(e.value);
+                    script.append(String.format("if (ctx._source[\"%s\"] == null) { ctx._source[\"%s\"] = [] };", e.field, e.field));
+                    script.append(String.format("if (!ctx._source[\"%s\"].contains(%s)) { ctx._source[\"%s\"].add(%s) };", e.field, jsValue, e.field, jsValue));
+                    if (hasDualStringMapping(keyInformation)) {
+                        String fieldDualName = getDualMappingName(e.field);
+                        script.append(String.format("if (ctx._source[\"%s\"] == null) { ctx._source[\"%s\"] = [] };", fieldDualName, fieldDualName));
+                        script.append(String.format("if (!ctx._source[\"%s\"].contains(%s)) { ctx._source[\"%s\"].add(%s) };", fieldDualName, jsValue, fieldDualName, jsValue));
+                    }
+                    break;
                 case LIST:
                     script.append("if(ctx._source[\"" + e.field + "\"] == null) {ctx._source[\"" + e.field + "\"] = []};");
                     script.append("ctx._source[\"" + e.field + "\"].add(" + convertToJsType(e.value) + ");");
@@ -668,7 +702,6 @@ public class ElasticSearchIndex implements IndexProvider {
                         script.append("ctx._source[\"" + getDualMappingName(e.field) + "\"].add(" + convertToJsType(e.value) + ");");
                     }
                     break;
-
             }
 
         }

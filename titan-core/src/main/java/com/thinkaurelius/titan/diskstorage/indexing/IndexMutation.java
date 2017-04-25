@@ -58,7 +58,11 @@ public class IndexMutation extends Mutation<IndexEntry,IndexEntry> {
         @Nullable
         @Override
         public String apply(@Nullable IndexEntry indexEntry) {
-            return indexEntry.field;
+            if (!indexEntry.isCollection) {
+                return indexEntry.field;
+            } else {
+                return indexEntry.field + ":" + indexEntry.value;
+            }
         }
     };
 

@@ -334,7 +334,8 @@ public class IndexSerializer {
 
     private IndexUpdate<String,IndexEntry> getMixedIndexUpdate(TitanElement element, PropertyKey key, Object value,
                                                                MixedIndexType index, IndexUpdate.Type updateType)  {
-        return new IndexUpdate<String,IndexEntry>(index,updateType,element2String(element),new IndexEntry(key2Field(index.getField(key)), value), element);
+        return new IndexUpdate<String,IndexEntry>(index, updateType, element2String(element),
+                new IndexEntry(key2Field(index.getField(key)), value, key.cardinality() != Cardinality.SINGLE), element);
     }
 
     public void reindexElement(TitanElement element, MixedIndexType index, Map<String,Map<String,List<IndexEntry>>> documentsPerStore) {
@@ -344,7 +345,7 @@ public class IndexSerializer {
             PropertyKey key = field.getFieldKey();
             if (field.getStatus()==SchemaStatus.DISABLED) continue;
             if (element.properties(key.name()).hasNext()) {
-                element.values(key.name()).forEachRemaining(value->entries.add(new IndexEntry(key2Field(field), value)));
+                element.values(key.name()).forEachRemaining(value->entries.add(new IndexEntry(key2Field(field), value, key.cardinality() != Cardinality.SINGLE)));
             }
         }
         Map<String,List<IndexEntry>> documents = documentsPerStore.get(index.getStoreName());
