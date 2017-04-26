@@ -61,7 +61,7 @@ public class IndexMutation extends Mutation<IndexEntry,IndexEntry> {
             if (!indexEntry.isCollection) {
                 return indexEntry.field;
             } else {
-                return indexEntry.field + ":" + indexEntry.value;
+                return indexEntry.field + '\0' + indexEntry.value;
             }
         }
     };
